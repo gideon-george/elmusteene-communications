@@ -15,6 +15,9 @@
 *.tsbuildinfo
 next-env.d.ts
 
+# Local tooling artifacts
+.claude/*.lock
+
 # Raw client assets (originals; optimised copies live in /public)
 /brand-assets/Musty
 /brand-assets/brief/mmb-extract
