@@ -60,6 +60,7 @@ export default function LaptopGallery() {
                 src={laptop.image}
                 alt={laptop.alt}
                 fill
+                priority={i < 2}
                 sizes="(min-width: 1024px) 24rem, (min-width: 640px) 50vw, 100vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
               />
