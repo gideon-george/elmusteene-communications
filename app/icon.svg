@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Elmusteene Communications monogram favicon: "E" on navy with an electric-blue signal dot -->
+  <rect width="64" height="64" rx="14" fill="#0F2C59"/>
+  <path d="M22 18h22v6H29v7h13v6H29v9h15v6H22V18z" fill="#FFFFFF"/>
+  <circle cx="48" cy="21" r="4" fill="#2E7DFF"/>
+</svg>

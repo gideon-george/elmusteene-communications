@@ -1,0 +1,20 @@
+# Dependencies
+/node_modules
+
+# Next.js build output
+/.next
+/out
+
+# Environment files
+.env
+.env*.local
+
+# Misc
+*.log
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+# Raw client assets (originals; optimised copies live in /public)
+/brand-assets/Musty
+/brand-assets/brief/mmb-extract
