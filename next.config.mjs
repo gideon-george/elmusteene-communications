@@ -9,6 +9,9 @@ const nextConfig = {
   // Static-friendly: no server-only features are used anywhere in the app,
   // so this exports to plain HTML for GitHub Pages or any static host.
   output: "export",
+  // Emit pages as folder/index.html so GitHub Pages serves both /laptops
+  // and /laptops/ (without this, /laptops/ is a 404).
+  trailingSlash: true,
   basePath,
   images: { unoptimized: true },
   reactStrictMode: true,
