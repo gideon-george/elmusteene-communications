@@ -41,8 +41,9 @@ export const BUSINESS = {
     schemaCloses: "19:00",
   },
 
+  // Live GitHub Pages URL.
   // TODO(owner): replace with the real production domain when it is registered.
-  siteUrl: "https://elmusteene-hub.vercel.app",
+  siteUrl: "https://gideon-george.github.io/elmusteene-communications",
 
   // TODO(owner): add real social media handles when available. None were
   // supplied, so no social links are shown anywhere on the site yet.

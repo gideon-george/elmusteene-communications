@@ -20,6 +20,10 @@ export default function VideoPlayer({
 }) {
   const ref = useRef<HTMLVideoElement>(null);
 
+  // Raw <video> attributes don't get Next's basePath prefix automatically
+  // (unlike next/image), so apply it here for subpath hosts like GitHub Pages.
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
@@ -46,8 +50,8 @@ export default function VideoPlayer({
   return (
     <video
       ref={ref}
-      src={src}
-      poster={poster}
+      src={`${basePath}${src}`}
+      poster={`${basePath}${poster}`}
       muted
       loop
       playsInline
