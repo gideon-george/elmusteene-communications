@@ -13,7 +13,9 @@ const nextConfig = {
   // and /laptops/ (without this, /laptops/ is a 404).
   trailingSlash: true,
   basePath,
-  images: { unoptimized: true },
+  // The custom loader (rather than `unoptimized: true`) is what applies
+  // basePath to image URLs — Next skips the prefix for unoptimized images.
+  images: { loader: "custom", loaderFile: "./lib/image-loader.ts" },
   reactStrictMode: true,
 };
 

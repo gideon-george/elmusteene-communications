@@ -20,8 +20,8 @@ export default function VideoPlayer({
 }) {
   const ref = useRef<HTMLVideoElement>(null);
 
-  // Raw <video> attributes don't get Next's basePath prefix automatically
-  // (unlike next/image), so apply it here for subpath hosts like GitHub Pages.
+  // Raw <video> attributes don't go through the next/image loader, so apply
+  // the basePath prefix here for subpath hosts like GitHub Pages.
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
   useEffect(() => {
