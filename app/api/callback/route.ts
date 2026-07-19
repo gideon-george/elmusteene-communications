@@ -37,11 +37,17 @@ export async function GET(request: NextRequest) {
     );
     const data = (await tokenResponse.json()) as {
       access_token?: string;
+      error?: string;
       error_description?: string;
     };
     payload = data.access_token
       ? { token: data.access_token }
-      : { error: data.error_description ?? "GitHub did not return a token." };
+      : {
+          error:
+            data.error_description ??
+            data.error ??
+            "GitHub did not return a token.",
+        };
   }
 
   const status = payload.token ? "success" : "error";
