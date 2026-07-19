@@ -1,0 +1,182 @@
+# Sveltia/Decap CMS configuration for the Elmusteene Communications site.
+# Docs: https://decapcms.org/docs/configuration-options/
+#
+# base_url must match the deployed domain that hosts /api/auth (this same
+# Vercel project). Update it if the production domain ever changes.
+
+backend:
+  name: github
+  repo: gideon-george/elmusteene-communications
+  branch: master
+  base_url: https://elmusteene-communications.vercel.app
+  auth_endpoint: api/auth
+
+site_url: https://elmusteene-communications.vercel.app
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+collections:
+  # ── Laptops for sale — one entry per unit ────────────────────────────
+  - name: laptops
+    label: Laptops for sale
+    label_singular: Laptop
+    folder: content/laptops
+    format: json
+    extension: json
+    create: true
+    delete: true
+    identifier_field: name
+    summary: "{{name}} — {{price}}"
+    sortable_fields: [order, name]
+    fields:
+      - label: Name
+        name: name
+        widget: string
+        hint: "Only what a customer can see — brand and type (e.g. \"Dell laptop\"). Add model names only if you are sure."
+      - label: Photo
+        name: image
+        widget: image
+        hint: "A clear photo of this exact unit."
+      - label: Photo description
+        name: alt
+        widget: string
+        hint: "Describe what the photo shows, for accessibility and Google (e.g. \"Dell laptop open on the shop desk\")."
+      - label: Specs
+        name: specs
+        widget: string
+        required: false
+        default: ""
+        hint: "Optional. Only confirmed specs, e.g. \"Intel Core i5 · 8GB RAM · 256GB SSD\". Leave empty to show \"ask us on WhatsApp\"."
+      - label: Price
+        name: price
+        widget: string
+        required: false
+        default: ""
+        hint: "Optional, e.g. \"₦450,000\". Leave empty to show price on request."
+      - label: Display order
+        name: order
+        widget: number
+        value_type: int
+        default: 99
+        hint: "Lower numbers appear first in the gallery."
+
+  # ── Site settings — single files ─────────────────────────────────────
+  - name: settings
+    label: Site settings
+    editor:
+      preview: false
+    files:
+      - name: business
+        label: Business info
+        file: content/business.json
+        fields:
+          - { label: Business name, name: name, widget: string }
+          - { label: Tagline, name: tagline, widget: text }
+          - { label: Intro paragraph, name: intro, widget: text }
+          - label: Address
+            name: address
+            widget: object
+            fields:
+              - { label: Street, name: street, widget: string }
+              - { label: City, name: city, widget: string }
+              - { label: State, name: state, widget: string }
+              - { label: Country, name: country, widget: string }
+          - label: Phone lines
+            name: phones
+            widget: list
+            hint: "Both lines should also be on WhatsApp. First line is the main one."
+            fields:
+              - label: Number
+                name: number
+                widget: string
+                hint: "Local format, digits only, e.g. 07065010455"
+          - label: Business hours
+            name: hours
+            widget: object
+            fields:
+              - { label: Open days, name: days, widget: string, hint: "e.g. Monday – Saturday" }
+              - { label: Opens, name: open, widget: string, hint: "e.g. 8:00 AM" }
+              - { label: Closes, name: close, widget: string, hint: "e.g. 7:00 PM" }
+              - { label: Closed on, name: closed, widget: string, hint: "e.g. Sunday" }
+          - label: Site URL
+            name: siteUrl
+            widget: string
+            hint: "Technical setting — do not change unless the site moves to a new domain."
+          - label: Social media links
+            name: socials
+            widget: list
+            required: false
+            fields:
+              - { label: Label, name: label, widget: string, hint: "e.g. Facebook" }
+              - { label: Link, name: href, widget: string, hint: "Full URL, e.g. https://facebook.com/yourpage" }
+          - label: WhatsApp pre-filled messages
+            name: whatsappMessages
+            widget: object
+            fields:
+              - { label: General enquiry, name: general, widget: text }
+              - { label: Laptop enquiry, name: laptop, widget: text }
+              - { label: Bulk laptops enquiry, name: laptopBulk, widget: text }
+
+      - name: services
+        label: Services
+        file: content/services.json
+        fields:
+          - label: Service pillars
+            name: services
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - label: Slug
+                name: slug
+                widget: string
+                hint: "Technical name used in links, lowercase-with-dashes (e.g. cyber-cafe). Don't change for existing services."
+              - { label: Title, name: title, widget: string }
+              - { label: Short description (cards), name: short, widget: text }
+              - { label: Intro sentence, name: intro, widget: text }
+              - label: What's included
+                name: bullets
+                widget: list
+                fields:
+                  - { label: Heading, name: heading, widget: string }
+                  - { label: Detail, name: detail, widget: text }
+              - label: Photo
+                name: image
+                widget: object
+                fields:
+                  - { label: Image, name: src, widget: image }
+                  - { label: Photo description, name: alt, widget: string }
+              - label: WhatsApp message
+                name: whatsappMessage
+                widget: text
+                hint: "The pre-filled message customers send when they tap this service's WhatsApp button."
+              - label: Note
+                name: note
+                widget: string
+                required: false
+                default: ""
+                hint: "Optional small note under the service (e.g. \"Ask us for current requirements\")."
+
+      - name: galleries
+        label: Photo galleries
+        file: content/galleries.json
+        fields:
+          - label: About page portrait
+            name: aboutPortrait
+            widget: object
+            fields:
+              - { label: Photo, name: src, widget: image }
+              - { label: Photo description, name: alt, widget: string }
+          - label: Workspace photos (About page)
+            name: workspacePhotos
+            widget: list
+            summary: "{{fields.caption}}"
+            fields:
+              - { label: Photo, name: src, widget: image }
+              - { label: Photo description, name: alt, widget: string }
+              - { label: Caption, name: caption, widget: string }
+          - label: Bulk stock photos (Laptops page)
+            name: stockPhotos
+            widget: list
+            fields:
+              - { label: Photo, name: src, widget: image }
+              - { label: Photo description, name: alt, widget: string }

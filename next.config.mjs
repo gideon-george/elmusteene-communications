@@ -1,22 +1,14 @@
-/**
- * GitHub Pages serves project sites under /<repo-name>, so the deploy
- * workflow sets NEXT_PUBLIC_BASE_PATH; local dev leaves it unset.
- */
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Static-friendly: no server-only features are used anywhere in the app,
-  // so this exports to plain HTML for GitHub Pages or any static host.
-  output: "export",
-  // Emit pages as folder/index.html so GitHub Pages serves both /laptops
-  // and /laptops/ (without this, /laptops/ is a 404).
-  trailingSlash: true,
-  basePath,
-  // The custom loader (rather than `unoptimized: true`) is what applies
-  // basePath to image URLs — Next skips the prefix for unoptimized images.
-  images: { loader: "custom", loaderFile: "./lib/image-loader.ts" },
+  // Hosted on Vercel: no static export or basePath needed (those were
+  // GitHub Pages requirements), and /api/* routes power the CMS login.
   reactStrictMode: true,
+  async redirects() {
+    return [
+      // The content manager is a static page in public/admin/.
+      { source: "/admin", destination: "/admin/index.html", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;

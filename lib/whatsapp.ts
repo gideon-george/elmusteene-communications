@@ -1,4 +1,4 @@
-import { PRIMARY_PHONE, SECONDARY_PHONE } from "./business";
+import { BUSINESS, PRIMARY_PHONE, SECONDARY_PHONE } from "./business";
 
 /**
  * Build a wa.me link with a pre-filled message.
@@ -10,27 +10,20 @@ export function waLink(message: string, waNumber: string = PRIMARY_PHONE.waNumbe
 }
 
 /** General enquiry — used by the header button and the floating bubble. */
-export const WA_GENERAL = waLink(
-  "Hello Elmusteene Communications! I have an enquiry about your services."
-);
+export const WA_GENERAL = waLink(BUSINESS.whatsappMessages.general);
 
 /** Second line, same general enquiry — offered on the contact page. */
 export const WA_GENERAL_LINE_2 = waLink(
-  "Hello Elmusteene Communications! I have an enquiry about your services.",
+  BUSINESS.whatsappMessages.general,
   SECONDARY_PHONE.waNumber
 );
 
-/** Context-specific pre-filled messages, one per service pillar. */
+/**
+ * Pre-filled laptop enquiry messages (owner-editable in content/business.json
+ * via /admin). Each service pillar's message lives with the service itself in
+ * content/services.json.
+ */
 export const WA_MESSAGES = {
-  cyberCafe:
-    "Hi Elmusteene! I need help with browsing, an exam/portal registration or document processing.",
-  repairs: "Hi Elmusteene! I'd like to book a computer/laptop repair.",
-  accessories:
-    "Hi Elmusteene! I'm looking for a computer accessory — is it in stock?",
-  pos: "Hi Elmusteene! I'd like to make a POS transaction (withdrawal, transfer, bills or top-up).",
-  bvn: "Hi Elmusteene! I need help with BVN enrollment, update or retrieval.",
-  laptop:
-    "Hi Elmusteene! I'm interested in a laptop I saw on your site — please share available options, specs and prices.",
-  laptopBulk:
-    "Hi Elmusteene! I'm interested in buying laptops in bulk — please share what's available.",
+  laptop: BUSINESS.whatsappMessages.laptop,
+  laptopBulk: BUSINESS.whatsappMessages.laptopBulk,
 } as const;

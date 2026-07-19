@@ -7,7 +7,8 @@ import VideoPlayer from "@/components/VideoPlayer";
 import ContactBand from "@/components/ContactBand";
 import { WhatsAppButton, CallButton } from "@/components/Buttons";
 import { waLink, WA_MESSAGES } from "@/lib/whatsapp";
-import { STOCK_PHOTOS } from "@/lib/laptops";
+import { getLaptops } from "@/lib/laptops";
+import { STOCK_PHOTOS } from "@/lib/galleries";
 
 export const metadata: Metadata = {
   title: "Laptops & Computers for Sale",
@@ -33,7 +34,7 @@ export default function LaptopsPage() {
       <section className="pb-16 sm:pb-20" aria-label="Laptop gallery">
         <div className="mx-auto max-w-content px-4 sm:px-6">
           <Reveal>
-            <LaptopGallery />
+            <LaptopGallery laptops={getLaptops()} />
           </Reveal>
         </div>
       </section>
@@ -79,11 +80,11 @@ export default function LaptopsPage() {
               <div className="grid grid-cols-2 gap-4">
                 {STOCK_PHOTOS.map((photo) => (
                   <div
-                    key={photo.image}
+                    key={photo.src}
                     className="relative aspect-[3/4] overflow-hidden rounded-2xl"
                   >
                     <Image
-                      src={photo.image}
+                      src={photo.src}
                       alt={photo.alt}
                       fill
                       sizes="(min-width: 1024px) 17rem, 50vw"

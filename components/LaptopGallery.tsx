@@ -6,23 +6,24 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { WhatsAppButton } from "./Buttons";
 import { waLink, WA_MESSAGES } from "@/lib/whatsapp";
-import { LAPTOPS } from "@/lib/laptops";
+import type { Laptop } from "@/lib/laptops";
 
 /**
  * Responsive laptop grid with click-to-enlarge lightbox.
  * Cards show only what is visible in the photo (brand, form factor) plus any
- * owner-confirmed specs/price from lib/laptops.ts — nothing is invented.
+ * owner-confirmed specs/price from content/laptops/ — nothing is invented.
+ * Data is read server-side and passed in as props.
  */
-export default function LaptopGallery() {
+export default function LaptopGallery({ laptops }: { laptops: Laptop[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const close = useCallback(() => setOpenIndex(null), []);
   const step = useCallback(
     (dir: 1 | -1) =>
       setOpenIndex((i) =>
-        i === null ? null : (i + dir + LAPTOPS.length) % LAPTOPS.length
+        i === null ? null : (i + dir + laptops.length) % laptops.length
       ),
-    []
+    [laptops.length]
   );
 
   useEffect(() => {
@@ -40,12 +41,12 @@ export default function LaptopGallery() {
     };
   }, [openIndex, close, step]);
 
-  const active = openIndex === null ? null : LAPTOPS[openIndex];
+  const active = openIndex === null ? null : laptops[openIndex];
 
   return (
     <>
       <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {LAPTOPS.map((laptop, i) => (
+        {laptops.map((laptop, i) => (
           <li
             key={laptop.image}
             className="group overflow-hidden rounded-2xl border border-navy/10 bg-white shadow-sm"

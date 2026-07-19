@@ -1,0 +1,28 @@
+{
+  "name": "Elmusteene Communications",
+  "tagline": "Your Trusted Hub for Cyber Café Services, Computer Tech, POS Banking, and Accessories.",
+  "intro": "At Elmusteene Communications, we bridge the digital gap. Whether you need high-speed internet browsing, a laptop repair, essential computer accessories, or quick financial transactions, we've got you covered under one roof.",
+  "address": {
+    "street": "Potiskum Road",
+    "city": "Azare",
+    "state": "Bauchi State",
+    "country": "Nigeria"
+  },
+  "phones": [
+    { "number": "07065010455" },
+    { "number": "07064455213" }
+  ],
+  "hours": {
+    "days": "Monday – Saturday",
+    "open": "8:00 AM",
+    "close": "7:00 PM",
+    "closed": "Sunday"
+  },
+  "siteUrl": "https://elmusteene-communications.vercel.app",
+  "socials": [],
+  "whatsappMessages": {
+    "general": "Hello Elmusteene Communications! I have an enquiry about your services.",
+    "laptop": "Hi Elmusteene! I'm interested in a laptop I saw on your site — please share available options, specs and prices.",
+    "laptopBulk": "Hi Elmusteene! I'm interested in buying laptops in bulk — please share what's available."
+  }
+}

@@ -6,49 +6,13 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import ContactBand from "@/components/ContactBand";
 import { WhatsAppButton, CallButton } from "@/components/Buttons";
 import { WA_GENERAL } from "@/lib/whatsapp";
+import { ABOUT_PORTRAIT, WORKSPACE_PHOTOS } from "@/lib/galleries";
 
 export const metadata: Metadata = {
   title: "About Us",
   description:
     "Elmusteene Communications bridges the digital gap in Azare, Bauchi State — one hub for cyber café services, computer repairs, POS banking, accessories and laptops.",
 };
-
-/**
- * Real workspace photos with honest captions — these show what is visibly
- * true: a hands-on operation, careful record-keeping, real stock on shelves.
- */
-const WORKSPACE_PHOTOS = [
-  {
-    src: "/images/about/proprietor-working-calculator.jpg",
-    alt: "Team member working at the service desk with a laptop and desk calculator",
-    caption: "Hands-on at the service desk",
-  },
-  {
-    src: "/images/about/proprietor-cash-records.jpg",
-    alt: "Team member carefully recording a cash transaction in the ledger beside a laptop",
-    caption: "Every transaction carefully recorded",
-  },
-  {
-    src: "/images/about/proprietor-accessories-shelf.jpg",
-    alt: "Team member at the desk with the shop's stocked accessories shelf behind",
-    caption: "Real stock, on real shelves",
-  },
-  {
-    src: "/images/about/proprietor-processing-documents.jpg",
-    alt: "Team member processing customer documents at a laptop",
-    caption: "Document processing, done properly",
-  },
-  {
-    src: "/images/about/proprietor-blue-at-laptop.jpg",
-    alt: "Team member concentrating on work at a laptop in the shop",
-    caption: "Personal attention on every job",
-  },
-  {
-    src: "/images/about/proprietor-smiling-phone.jpg",
-    alt: "Team member smiling while replying to a customer message on the phone",
-    caption: "Quick to reply — try us on WhatsApp",
-  },
-];
 
 export default function AboutPage() {
   return (
@@ -71,8 +35,8 @@ export default function AboutPage() {
             <Reveal>
               <div className="relative aspect-[3/4] max-h-[34rem] overflow-hidden rounded-3xl">
                 <Image
-                  src="/images/about/proprietor-at-desk.jpg"
-                  alt="The proprietor seated at the service desk inside the shop"
+                  src={ABOUT_PORTRAIT.src}
+                  alt={ABOUT_PORTRAIT.alt}
                   fill
                   sizes="(min-width: 1024px) 34rem, 100vw"
                   className="object-cover"

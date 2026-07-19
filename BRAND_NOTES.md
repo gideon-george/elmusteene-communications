@@ -37,18 +37,20 @@ or conditions, fees, timelines, owner name/bio, founding date, reviews,
 ratings, or social handles.
 
 Laptop cards intentionally say "Specs & price on request" until the owner
-supplies real details (see `lib/laptops.ts` — optional `specs`/`price`
-fields are ready).
+supplies real details (optional `specs`/`price` fields on each entry in
+`content/laptops/` — the owner can fill them in via `/admin`).
 
 ## Open TODOs (waiting on the owner)
 
-1. **Domain** — `siteUrl` in `lib/business.ts` is a placeholder
-   (`elmusteene-hub.vercel.app`); update when the real domain exists.
+1. **Domain** — `siteUrl` in `content/business.json` points at the Vercel
+   URL; update when the real domain exists (also `base_url`/`site_url` in
+   `public/admin/config.yml`).
 2. **Google Maps pin** — map is centred on "Potiskum Road, Azare"; replace
    `MAPS_EMBED_URL` with the exact-pin embed URL when available.
 3. **Owner name / bio / founding year** — About page has a marked TODO;
    current copy only describes what the photos visibly show.
-4. **Laptop specs & prices** — add per-unit in `lib/laptops.ts`.
+4. **Laptop specs & prices** — the owner adds them per-unit via `/admin`
+   (Laptops for sale).
 5. **BVN specifics** — no fees, timelines or agent-status claims are made;
    confirm details before adding any.
 6. **Social media handles** — none supplied; `BUSINESS.socials` is empty and

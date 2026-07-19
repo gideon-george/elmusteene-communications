@@ -9,11 +9,12 @@ This is a **local service business site** — the primary actions are
 
 ## Tech stack
 
-- [Next.js 14](https://nextjs.org/) (App Router) + TypeScript
+- [Next.js 14](https://nextjs.org/) (App Router) + TypeScript, deployed on Vercel
 - [Tailwind CSS](https://tailwindcss.com/) for styling
 - [Framer Motion](https://www.framer.com/motion/) for subtle scroll animations
 - [lucide-react](https://lucide.dev/) icons
-- Fully static output — deploys to Vercel (zero config) or any static host
+- [Sveltia CMS](https://github.com/sveltia/sveltia-cms) at `/admin` — Git-based
+  content manager so the owner can post content without touching code
 
 ## Getting started
 
@@ -24,97 +25,71 @@ npm run build      # production build
 npm start          # serve the production build
 ```
 
-To deploy on Vercel: push this repo to GitHub, import it at vercel.com, done.
-No environment variables are required.
-
 ## Project structure
 
 ```
 app/               Pages: / (home), /services, /laptops, /about, /contact
-                   plus sitemap.ts, robots.ts and the favicon (icon.svg)
+                   plus /api/auth + /api/callback (CMS GitHub login),
+                   sitemap.ts, robots.ts and the favicon (icon.svg)
 components/        Reusable UI (navbar, footer, buttons, gallery, form, …)
-lib/               ALL editable content lives here (see below)
-public/images/     Photos grouped by use: hero/, services/, laptops/, about/
+content/           ALL editable content (JSON) — what /admin reads & writes
+  business.json      name, tagline, address, phones, hours, WhatsApp messages
+  services.json      the service pillars
+  galleries.json     about-page photos and bulk-stock photos
+  laptops/           one JSON file per laptop for sale
+lib/               Typed loaders that derive display formats from content/
+public/images/     Photos grouped by use: hero/, services/, laptops/, about/,
+                   uploads/ (photos added through /admin land here)
+public/admin/      The content manager (Sveltia CMS) + its config.yml
 public/videos/     Self-hosted short clips + their poster images
 brand-assets/      The client's original brief and raw photos (git-ignored)
 ```
 
----
+## Content management (/admin)
 
-## Editing guide (no coding experience needed)
+The site has a content manager at **`/admin`** — see **OWNER_GUIDE.md** for
+the owner-facing instructions. Every save in /admin is a git commit to this
+repo, which triggers a Vercel redeploy (live in ~1–2 minutes).
 
-All the day-to-day content lives in three small files in `lib/`. Edit the text
-between quotes, save, and the whole site updates.
+### One-time setup (developer)
 
-### Change phone numbers, address or hours
+1. **Deploy on Vercel** — import this repo at vercel.com. No build settings
+   needed. Note the production URL.
+2. **Create a GitHub OAuth App** — github.com → Settings → Developer settings
+   → OAuth Apps → New:
+   - Homepage URL: `https://<production-url>`
+   - Authorization callback URL: `https://<production-url>/api/callback`
+3. **Set env vars in Vercel** (Project → Settings → Environment Variables),
+   then redeploy:
+   - `OAUTH_GITHUB_CLIENT_ID`
+   - `OAUTH_GITHUB_CLIENT_SECRET`
+4. **Match the domain in the repo** — `base_url`/`site_url` in
+   `public/admin/config.yml` and `siteUrl` in `content/business.json` must be
+   the production URL.
+5. **Invite the owner** — the owner needs a (free) GitHub account added as a
+   repo **collaborator** (Settings → Collaborators). They sign in to /admin
+   with that account.
 
-Open **`lib/business.ts`**. Everything is at the top:
+### Content conventions
 
-- Phone numbers: edit the `phones` list. Keep both formats in sync —
-  `display` (what visitors see) and `e164`/`waNumber` (used by call and
-  WhatsApp links; Nigerian numbers drop the leading 0 and start with 234).
-- Address: edit the `address` block.
-- Hours: edit the `hours` block (also update `schemaOpens`/`schemaCloses`,
-  which Google reads — 24-hour format).
-- When the real domain is registered, update `siteUrl`.
-
-### Edit services
-
-Open **`lib/services.ts`**. Each service is a block with a `title`, `intro`,
-bullet points (`heading` + `detail`), a photo and a pre-filled WhatsApp
-message. Edit the text or add/remove bullets; the Services page and homepage
-cards update automatically.
-
-### Add or edit laptop listings
-
-Open **`lib/laptops.ts`**. Each laptop looks like this:
-
-```ts
-{
-  name: "Dell laptop",
-  image: "/images/laptops/dell-laptop-open-display.jpg",
-  alt: "Slim Dell laptop open on the shop desk",
-},
-```
-
-To add a new laptop: copy a photo into `public/images/laptops/` (use simple
-lowercase names with hyphens), then copy one of these blocks and update it.
-
-**To show real specs and prices later**, add the optional fields — they appear
-on the card automatically:
-
-```ts
-{
-  name: "Dell laptop",
-  image: "/images/laptops/dell-laptop-open-display.jpg",
-  alt: "Slim Dell laptop open on the shop desk",
-  specs: "Intel Core i7 · 16GB RAM · 512GB SSD",   // optional
-  price: "₦450,000",                                // optional
-},
-```
-
-Until those are filled in, cards say "Specs & price on request".
-
-### Swap photos
-
-Replace the file in `public/images/...` keeping the same filename, or add a
-new file and update the path in the matching `lib/` data file (or page).
-Please also update the `alt` text so it describes the new photo — screen
-readers and Google both use it.
-
-### Change the pre-filled WhatsApp messages
-
-Open **`lib/whatsapp.ts`** — every button's pre-filled text is in the
-`WA_MESSAGES` list.
+- Phone numbers are stored in plain local format (`07065010455`);
+  `lib/business.ts` derives the display grouping, `tel:` and `wa.me` formats.
+- Hours are stored as plain text (`8:00 AM`); schema.org values are derived.
+- Laptop `specs`/`price` stay **empty** unless the owner has confirmed real
+  details (honesty rule — see BRAND_NOTES.md). Empty means the card shows
+  "Specs & price on request".
+- Service icons live in code (`lib/services.ts`), matched by slug.
 
 ### Google Map pin
 
-The contact page currently centres the map on "Potiskum Road, Azare". Once
-the shop has an exact pin on Google Maps, open the pin → Share → *Embed a map*
-→ copy the URL from the iframe code, and paste it as `MAPS_EMBED_URL` in
+The contact page centres the map on "Potiskum Road, Azare". Once the shop has
+an exact pin on Google Maps: open the pin → Share → *Embed a map* → copy the
+URL from the iframe code, and paste it as `MAPS_EMBED_URL` in
 `lib/business.ts`.
 
 ---
 
 See **BRAND_NOTES.md** for the brand palette, honest-content rules, and the
 list of TODOs awaiting real information from the owner.
+See **docs/cms-conversion-playbook.md** for the reusable recipe this
+conversion followed (static site → Vercel + Sveltia CMS).

@@ -9,6 +9,7 @@ import ContactBand from "@/components/ContactBand";
 import { WhatsAppButton, CallButton } from "@/components/Buttons";
 import { BUSINESS } from "@/lib/business";
 import { SERVICES } from "@/lib/services";
+import { getLaptops } from "@/lib/laptops";
 import { waLink, WA_GENERAL, WA_MESSAGES } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
@@ -17,6 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  // First two gallery units illustrate the laptops teaser strip, so the strip
+  // updates automatically when the owner posts new stock via /admin.
+  const teaserLaptops = getLaptops().slice(0, 2);
+
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
@@ -148,24 +153,20 @@ export default function HomePage() {
           <div className="grid items-center gap-10 lg:grid-cols-2">
             <Reveal>
               <div className="grid grid-cols-2 gap-4">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl">
-                  <Image
-                    src="/images/laptops/dell-laptop-open-display.jpg"
-                    alt="Slim Dell laptop open on the shop desk showing the Windows lock screen"
-                    fill
-                    sizes="(min-width: 1024px) 17rem, 50vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative mt-8 aspect-[3/4] overflow-hidden rounded-2xl">
-                  <Image
-                    src="/images/laptops/lenovo-tablet-mode.jpg"
-                    alt="Lenovo convertible folded into tablet mode showing the Windows desktop"
-                    fill
-                    sizes="(min-width: 1024px) 17rem, 50vw"
-                    className="object-cover"
-                  />
-                </div>
+                {teaserLaptops.map((laptop, i) => (
+                  <div
+                    key={laptop.image}
+                    className={`relative aspect-[3/4] overflow-hidden rounded-2xl ${i === 1 ? "mt-8" : ""}`}
+                  >
+                    <Image
+                      src={laptop.image}
+                      alt={laptop.alt}
+                      fill
+                      sizes="(min-width: 1024px) 17rem, 50vw"
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
               </div>
             </Reveal>
             <Reveal delay={0.1}>

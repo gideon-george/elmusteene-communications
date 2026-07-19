@@ -1,86 +1,49 @@
 /**
- * Laptops & Computers for Sale — gallery data.
+ * Laptops & Computers for Sale — one JSON file per unit in content/laptops/,
+ * created and edited by the owner through the /admin content manager.
  *
  * IMPORTANT (honesty rule): only what is visible in the photos is described.
- * No specifications, conditions, prices or warranty claims are invented.
+ * `specs` and `price` stay empty until the owner confirms real details.
  *
- * TODO(owner): to advertise real details for a unit, fill in the optional
- * `specs` and `price` fields below — they will automatically appear on the
- * laptop's card. Example:
- *   specs: "Intel Core i7 · 16GB RAM · 512GB SSD",
- *   price: "₦450,000",
+ * Server-only (reads the filesystem at build time): pages call getLaptops()
+ * and pass the result to client components as props. Client components may
+ * `import type { Laptop }` — type imports are erased at compile time.
  */
+
+import fs from "node:fs";
+import path from "node:path";
 
 export type Laptop = {
   /** Neutral, visible-brand-only label (no invented model claims). */
   name: string;
   image: string;
   alt: string;
-  specs?: string; // TODO(owner): add real specs per unit when confirmed
-  price?: string; // TODO(owner): add real price per unit when confirmed
+  specs?: string;
+  price?: string;
+  /** Lower numbers show first in the gallery. */
+  order?: number;
 };
 
-export const LAPTOPS: Laptop[] = [
-  {
-    name: "Dell laptop",
-    image: "/images/laptops/dell-laptop-open-display.jpg",
-    alt: "Slim Dell laptop open on the shop desk showing the Windows lock screen",
-  },
-  {
-    name: "Dell laptop",
-    image: "/images/laptops/dell-laptop-lock-screen.jpg",
-    alt: "Dell laptop with backlit keyboard open on the shop desk, screen still in protective wrap",
-  },
-  {
-    name: "Dell laptop",
-    image: "/images/laptops/dell-laptop-open-shop-desk.jpg",
-    alt: "Dell laptop open on the shop desk with its screen in protective wrapping",
-  },
-  {
-    name: "Dell laptop (white lid)",
-    image: "/images/laptops/dell-white-lid-closed.jpg",
-    alt: "White-lidded Dell laptop closed on the shop desk, still in protective wrap",
-  },
-  {
-    name: "Dell laptop (white lid)",
-    image: "/images/laptops/dell-white-lid-closed-2.jpg",
-    alt: "White-lidded Dell laptop on the sales desk with other laptops and a POS terminal behind it",
-  },
-  {
-    name: "Lenovo convertible netbooks",
-    image: "/images/laptops/lenovo-convertibles-pair.jpg",
-    alt: "Two Lenovo convertible netbooks displayed together, one powered on",
-  },
-  {
-    name: "Lenovo netbook",
-    image: "/images/laptops/lenovo-netbook-keyboard.jpg",
-    alt: "Lenovo netbook held up to show its keyboard and touchpad",
-  },
-  {
-    name: "Lenovo netbook",
-    image: "/images/laptops/lenovo-netbook-welcome.jpg",
-    alt: "Lenovo netbook powered on at the Windows welcome screen",
-  },
-  {
-    name: "Lenovo convertible (tablet mode)",
-    image: "/images/laptops/lenovo-tablet-mode.jpg",
-    alt: "Lenovo convertible folded into tablet mode showing the Windows desktop",
-  },
-  {
-    name: "HP laptop",
-    image: "/images/laptops/hp-probook-display.jpg",
-    alt: "Silver HP laptop open on a display shelf showing the Windows start menu",
-  },
-];
+const LAPTOPS_DIR = path.join(process.cwd(), "content", "laptops");
 
-/** Photos that show bulk/stock availability (used in the bulk-enquiry band). */
-export const STOCK_PHOTOS = [
-  {
-    image: "/images/laptops/laptop-stock-stacks.jpg",
-    alt: "Stacks of laptops of various brands piled in the stock room",
-  },
-  {
-    image: "/images/laptops/parts-stock-carton.jpg",
-    alt: "Carton packed with rows of new computer stock",
-  },
-];
+export function getLaptops(): Laptop[] {
+  if (!fs.existsSync(LAPTOPS_DIR)) return [];
+  return fs
+    .readdirSync(LAPTOPS_DIR)
+    .filter((f) => f.endsWith(".json"))
+    .map((f) => {
+      const raw = JSON.parse(
+        fs.readFileSync(path.join(LAPTOPS_DIR, f), "utf8")
+      ) as Laptop;
+      return {
+        ...raw,
+        specs: raw.specs || undefined,
+        price: raw.price || undefined,
+      };
+    })
+    .sort(
+      (a, b) =>
+        (a.order ?? Number.MAX_SAFE_INTEGER) -
+          (b.order ?? Number.MAX_SAFE_INTEGER) || a.name.localeCompare(b.name)
+    );
+}
